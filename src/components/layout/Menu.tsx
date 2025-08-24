@@ -1,30 +1,39 @@
-import { menuItems } from '@/data/menuData'
-import Image from 'next/image'
-import Link from 'next/link'
-import React from 'react'
+import { menuItems } from "@/data/menuData";
+import { role } from "@/lib/data";
+import Link from "next/link";
+import React from "react";
 
 const Menu = () => {
   return (
-    <div>
-        {menuItems.map(i => (
-            <div key={i.title}>
-                <h2>{i.title}</h2>
-                <ul>
-                    {i.items.map(item => (
-                        <Link href={item.href} key={item.label}>
-                            <Image
-                             src={item.icon}
-                             alt={item.label} 
-                             width={20} 
-                             height={20} />
-                            <span>{item.label}</span>
-                        </Link>
-                    ))}
-                </ul>
-            </div>
-        ))}
+    <div className="mt-4 text-sm">
+      {menuItems.map((i) => (
+        <div key={i.title} className="flex flex-col gap-2">
+          <h2 className="hidden lg:block text-gray-400 font-light my-4">
+            {i.title}
+          </h2>
+          <ul>
+            {i.items.map((item) => {
+              if (item.visible.includes(role)) {
+                return (
+                  <Link
+                    href={item.href}
+                    key={item.label}
+                    className="flex items-center justify-center lg:justify-start gap-4
+                                text-gray-500 py-2 rounded-md md:px-2
+                                hover:bg-sky-100 hover:dark:bg-sky-100/20 
+                                hover:text-sky-600"
+                  >
+                    {typeof item.icon === "function" && <item.icon />}
+                    <span className="hidden lg:block">{item.label}</span>
+                  </Link>
+                );
+              }
+            })}
+          </ul>
+        </div>
+      ))}
     </div>
-  )
-}
+  );
+};
 
-export default Menu
+export default Menu;
