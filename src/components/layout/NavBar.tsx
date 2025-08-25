@@ -18,7 +18,7 @@ const NavBar = () => {
         <Input
           type="text"
           placeholder="Search..."
-          className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-black"
         />
       </div>
       {/* icons and user */}

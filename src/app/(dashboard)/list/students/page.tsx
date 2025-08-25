@@ -6,20 +6,21 @@ import { GoPlus } from "react-icons/go";
 import React from "react";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
-import { teacherTableColumns } from "@/data/table";
+import { studentTableColumns } from "@/data/table";
 import Image from "next/image";
 import Link from "next/link";
 import { GrView } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
-import { role, teachersData } from "@/lib/data";
-import { teacherProps } from "@/types/allTableType";
+import { role, studentsData } from "@/lib/data";
+import { studentProps } from "@/types/allTableType";
 
-const TeacherList = () => {
-  const renderRow = (item: teacherProps) => (
+const StudentList = () => {
+  const renderRow = (item: studentProps) => (
     <tr
       key={item.id}
       className="hover:bg-sky-100 hover:dark:bg-sky-100/20 cursor-pointer
-        border-b border-gray-200">
+        border-b border-gray-200"
+    >
       <td className="flex items-center gap-4 p-4">
         <Image
           src={item.photo}
@@ -30,12 +31,11 @@ const TeacherList = () => {
         />
         <div className="flex flex-col">
           <h3 className="font-semibold">{item.name}</h3>
-          <p className="text-xs text-gray-500">{item?.email}</p>
+          <p className="text-xs text-gray-500">{item.class}</p>
         </div>
       </td>
-      <td className="hidden md:table-cell">{item.teacherId}</td>
-      <td className="hidden md:table-cell">{item.subjects.join(", ")}</td>
-      <td className="hidden md:table-cell">{item.classes.join(", ")}</td>
+      <td className="hidden md:table-cell">{item.studentId}</td>
+      <td className="hidden md:table-cell">{item.grade}</td>
       <td className="hidden md:table-cell">{item.phone}</td>
       <td className="hidden md:table-cell">{item.address}</td>
       <td>
@@ -67,7 +67,7 @@ const TeacherList = () => {
     <div className="dark:bg-[#171616] p-4 rounded-md flex-1 m-4 mt-0">
       {/* top */}
       <div className="flex items-center justify-between">
-        <h1 className="hidden md:block text-lg font-semibold">All Teachers</h1>
+        <h1 className="hidden md:block text-lg font-semibold">All Students</h1>
         <div className="flex flex-col md:flex-row gap-4 items-center w-full md:w-auto">
           <TableSearch />
           <Button
@@ -85,9 +85,9 @@ const TeacherList = () => {
       </div>
       {/* list */}
       <Table
-        columns={teacherTableColumns}
+        columns={studentTableColumns}
         renderRow={renderRow}
-        data={teachersData}
+        data={studentsData}
       />
       {/* pagination */}
       <Pagination />
@@ -95,4 +95,4 @@ const TeacherList = () => {
   );
 };
 
-export default TeacherList;
+export default StudentList;

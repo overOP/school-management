@@ -31,8 +31,8 @@ const ModeToggle = () => {
       size="icon"
       onClick={toggleTheme}
       aria-label="Toggle theme"
-      className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0
-       hover:bg-transparent dark:hover:bg-transparent"
+            className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0
+                 dark:bg-black hover:dark:bg-black cursor-pointer"
     >
       {theme === "dark" ? (
         <SunIcon className="h-[1.2rem] w-[1.2rem] transition-all hover:scale-110" />
