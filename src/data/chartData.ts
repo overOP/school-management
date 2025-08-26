@@ -106,3 +106,15 @@ export const lineData = [
       expense: 4300,
     },
   ];
+  export const angleData = [
+    { 
+        name: 'Group A',
+        value: 92,
+        fill: "#c3ebfa"
+    },
+    { 
+        name: 'Group B', 
+        value: 8,
+        fill: "#fae27c"
+    },
+  ];

@@ -70,3 +70,17 @@ export interface resultProps {
     date: string,
     score: number
 }
+export interface eventProps {
+    id: number,
+    title: string,
+    class: string,
+    date: string,
+    startTime: string,
+    endTime: string
+}
+export interface announcementProps {
+    id: number,
+    title: string,
+    class: string,
+    date: string,
+}

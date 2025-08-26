@@ -10,15 +10,17 @@ import { parentTableColumns } from "@/data/table";
 import Link from "next/link";
 import { MdModeEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
-import { parentsData, role} from "@/lib/data";
+import { parentsData, role } from "@/lib/data";
 import { parentProps } from "@/types/allTableType";
+import FormModal from "@/components/FormModal";
 
 const ParentList = () => {
   const renderRow = (item: parentProps) => (
     <tr
       key={item.id}
       className="hover:bg-sky-100 hover:dark:bg-sky-100/20 cursor-pointer
-        border-b border-gray-200">
+        border-b border-gray-200"
+    >
       <td className="flex items-center gap-4 p-4">
         <div className="flex flex-col">
           <h3 className="font-semibold">{item.name}</h3>
@@ -30,24 +32,21 @@ const ParentList = () => {
       <td className="hidden md:table-cell">{item.address}</td>
       <td>
         <div className="flex items-center gap-2">
-          <Link href={`/list/teachers/${item.id}`}>
-            <Button
-              variant="outline"
-              className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0
-                 bg-sky-200 hover:bg-sky-300
-                 dark:bg-gray-400 hover:dark:bg-gray-500 cursor-pointer">
-              <MdModeEdit />
-            </Button>
-          </Link>
           {role === "admin" && (
-            <Button
-              variant="outline"
-              className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0
-                           bg-red-200 hover:bg-red-300  
-                           dark:bg-red-400 hover:dark:bg-red-500 cursor-pointer"
-            >
-              <MdDelete />
-            </Button>
+            <>
+              <FormModal
+                table="parent"
+                type="update"
+                data={item}
+                icon={<MdModeEdit />}
+              />
+              <FormModal
+                table="parent"
+                type="delete"
+                id={item.id}
+                icon={<MdDelete />}
+              />
+            </>
           )}
         </div>
       </td>
@@ -60,17 +59,13 @@ const ParentList = () => {
         <h1 className="hidden md:block text-lg font-semibold">All Parents</h1>
         <div className="flex flex-col md:flex-row gap-4 items-center w-full md:w-auto">
           <TableSearch />
-          <Button
-            variant="outline"
-            className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0
-                 dark:bg-[#171616] hover:dark:bg-[#171616] cursor-pointer self-end"
-          >
-            <div className="flex items-center gap-4">
-              <HiOutlineAdjustmentsHorizontal />
-              <BsSortDown />
-              {role === "admin" && <GoPlus />}
-            </div>
-          </Button>
+          <div className="flex items-center gap-4 self-end">
+            <HiOutlineAdjustmentsHorizontal />
+            <BsSortDown />
+            {role === "admin" && (
+              <FormModal table="parent" type="create" icon={<GoPlus />} />
+            )}
+          </div>
         </div>
       </div>
       {/* list */}

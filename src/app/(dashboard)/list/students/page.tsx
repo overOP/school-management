@@ -13,6 +13,7 @@ import { GrView } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
 import { role, studentsData } from "@/lib/data";
 import { studentProps } from "@/types/allTableType";
+import FormModal from "@/components/FormModal";
 
 const StudentList = () => {
   const renderRow = (item: studentProps) => (
@@ -40,25 +41,15 @@ const StudentList = () => {
       <td className="hidden md:table-cell">{item.address}</td>
       <td>
         <div className="flex items-center gap-2">
-          <Link href={`/list/teachers/${item.id}`}>
+          <Link href={`/list/students/${item.id}`}>
             <Button
               variant="outline"
-              className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0
-                 bg-sky-200 hover:bg-sky-300
-                 dark:bg-gray-400 hover:dark:bg-gray-500 cursor-pointer">
+              className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0">
               <GrView />
             </Button>
           </Link>
-          {role === "admin" && (
-            <Button
-              variant="outline"
-              className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0
-                           bg-red-200 hover:bg-red-300  
-                           dark:bg-red-400 hover:dark:bg-red-500 cursor-pointer"
-            >
-              <MdDelete />
-            </Button>
-          )}
+          {role === "admin" && 
+              <FormModal table="student" type="delete" id={item.id} icon={<MdDelete />} />}
         </div>
       </td>
     </tr>
@@ -70,17 +61,12 @@ const StudentList = () => {
         <h1 className="hidden md:block text-lg font-semibold">All Students</h1>
         <div className="flex flex-col md:flex-row gap-4 items-center w-full md:w-auto">
           <TableSearch />
-          <Button
-            variant="outline"
-            className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0
-                 dark:bg-[#171616] hover:dark:bg-[#171616] cursor-pointer self-end"
-          >
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 self-end">
               <HiOutlineAdjustmentsHorizontal />
               <BsSortDown />
-              {role === "admin" && <GoPlus />}
+              {role === "admin" && 
+              <FormModal table="student" type="create" icon={<GoPlus />}/>}
             </div>
-          </Button>
         </div>
       </div>
       {/* list */}
