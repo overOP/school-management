@@ -12,6 +12,7 @@ import BigCalendar from "@/components/BigCalender";
 import Announcements from "@/components/Announcements";
 import Link from "next/link";
 import Performance from "@/components/Performance";
+import FormModal from "@/components/FormModal";
 
 const SingleTeacher = () => {
   return (
@@ -32,7 +33,11 @@ const SingleTeacher = () => {
               />
             </div>
             <div className="w-2/3 flex flex-col justify-between gap-4">
-              <h1 className="text-xl font-semibold">Pradeep Chaudhary</h1>
+            <div className="flex items-center gap-4">
+                <h1 className="text-xl font-semibold">Pradeep Chaudhary</h1>
+              <FormModal table="teacher" type="update" data={"teacher"} icon={<MdOutlinePeopleAlt/>} />
+            </div>
+              
               <p className="text-sm text-gray-400">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
               </p>

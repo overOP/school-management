@@ -3,19 +3,42 @@ import { formProps } from "@/types/formType";
 import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { IoIosClose } from "react-icons/io";
+import dynamic from "next/dynamic";
+
+// dynamic form
+const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
+    loading: () => <p>Loading...</p>,
+});
+const StudentForm = dynamic(() => import("./forms/StudentForm"), {
+    loading: () => <p>Loading...</p>,
+});
+
+const forms : {
+  [key: string]: (type: "create" | "update", data?: any) => JSX.Element;
+} = {
+  teacher: (type, data) => <TeacherForm type={type} data={data} />,
+  student: (type, data) => <StudentForm type={type} data={data} />,
+};
 
 const FormModal = ({ table, type, data, id, icon }: formProps) => {
   const [open, setOpen] = useState(false);
   const Form = () => {
     return type === "delete" && id ? (
-        <form action="" className="p-4 flex flex-col gap-4 ">
-            <span className="text-center font-medium dark:text-black">All data will be deleted. Are you sure you want to delete this {table}?</span>
-            <Button className="bg-red-600 text-white py-2 px-4 rounded-md border-0 w-max self-center">Delete</Button>
-        </form>
-    ) : (
-        <div className="text-black">create or update form</div>
-    )
-  }
+      <form action="" className="p-4 flex flex-col gap-4 ">
+        <span className="text-center font-medium dark:text-black">
+          All data will be deleted. Are you sure you want to delete this {table}
+          ?
+        </span>
+        <Button className="bg-red-600 text-white py-2 px-4 rounded-md border-0 w-max self-center">
+          Delete
+        </Button>
+      </form>
+    ) : type === "create" || type === "update" ? (
+      <div className="text-black">
+        {forms[table](type, data)}
+      </div>
+    ) : <div className="text-black">form not found</div>;
+  };
   return (
     <>
       <Button

@@ -1,5 +1,4 @@
 import TableSearch from "@/components/TableSearch";
-import { Button } from "@/components/ui/button";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import { BsSortDown } from "react-icons/bs";
 import { MdModeEdit } from "react-icons/md";
@@ -8,7 +7,6 @@ import React from "react";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import { eventTableColumns } from "@/data/table";
-import Link from "next/link";
 import { MdDelete } from "react-icons/md";
 import { eventsData,role } from "@/lib/data";
 import { eventProps } from "@/types/allTableType";
