@@ -1,14 +1,13 @@
-export interface teacherProps {
-    id: number,
-    teacherId: string,
-    name: string,
-    email?: string,
-    photo: string,
-    phone: string,
-    subjects: string[],
-    classes: string[],
-    address: string
-}
+import { Class, Subject, Teacher } from "@/generated/prisma"
+
+export type teacherProps =
+    Teacher & {
+        subjects: Subject[]
+    }& {
+        classes: Class[]
+    }
+
+
 export interface studentProps {
     id: number,
     studentId: string,

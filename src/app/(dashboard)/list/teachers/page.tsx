@@ -11,50 +11,80 @@ import Image from "next/image";
 import Link from "next/link";
 import { GrView } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
-import { role, teachersData } from "@/lib/data";
-import { teacherProps } from "@/types/allTableType";
+import { role } from "@/lib/data";
 import FormModal from "@/components/FormModal";
+import { teacherProps } from "@/types/allTableType";
+import prisma from "@/lib/prisma";
+import { ITEM_PER_PAGE } from "@/lib/settings";
 
-const TeacherList = () => {
-  const renderRow = (item: teacherProps) => (
-    <tr
-      key={item.id}
-      className="hover:bg-sky-100 hover:dark:bg-sky-100/20 cursor-pointer
-        border-b border-gray-200">
-      <td className="flex items-center gap-4 p-4">
-        <Image
-          src={item.photo}
-          alt={item.name}
-          width={50}
-          height={50}
-          className="md:hidden xl:block w-10 h-10 object-cover rounded-full"
-        />
-        <div className="flex flex-col">
-          <h3 className="font-semibold">{item.name}</h3>
-          <p className="text-xs text-gray-500">{item?.email}</p>
-        </div>
-      </td>
-      <td className="hidden md:table-cell">{item.teacherId}</td>
-      <td className="hidden md:table-cell">{item.subjects.join(", ")}</td>
-      <td className="hidden md:table-cell">{item.classes.join(", ")}</td>
-      <td className="hidden md:table-cell">{item.phone}</td>
-      <td className="hidden md:table-cell">{item.address}</td>
-      <td>
-        <div className="flex items-center gap-2">
-          <Link href={`/list/teachers/${item.id}`}>
-            <Button
-              variant="outline"
-              className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0">
-              <GrView />
-            </Button>
-          </Link>
-          {role === "admin" && 
-              <FormModal table="teacher" type="delete" id={item.id} icon={<MdDelete />} />
-          }
-        </div>
-      </td>
-    </tr>
-  ); // the join method is used to convert an array into a string
+const renderRow = (item: teacherProps) => (
+  <tr
+    key={item.id}
+    className="hover:bg-sky-100 hover:dark:bg-sky-100/20 cursor-pointer
+        border-b border-gray-200"
+  >
+    <td className="flex items-center gap-4 p-4">
+      <Image
+        src={item.img || "/noAvatar.png"}
+        alt={item.name}
+        width={50}
+        height={50}
+        className="md:hidden xl:block w-10 h-10 object-cover rounded-full"
+      />
+      <div className="flex flex-col">
+        <h3 className="font-semibold">{item.name}</h3>
+        <p className="text-xs text-gray-500">{item?.email}</p>
+      </div>
+    </td>
+    <td className="hidden md:table-cell">{item.username}</td>
+    <td className="hidden md:table-cell">
+      {item.subjects.map((subject) => subject.name).join(", ")}
+    </td>
+    <td className="hidden md:table-cell">
+      {item.classes.map((classItem) => classItem.name).join(", ")}
+    </td>
+    <td className="hidden md:table-cell">{item.phone}</td>
+    <td className="hidden md:table-cell">{item.address}</td>
+    <td>
+      <div className="flex items-center gap-2">
+        <Link href={`/list/teachers/${item.id}`}>
+          <Button
+            variant="outline"
+            className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+          >
+            <GrView />
+          </Button>
+        </Link>
+        {role === "admin" && (
+          <FormModal
+            table="teacher"
+            type="delete"
+            id={item.id}
+            icon={<MdDelete />}
+          />
+        )}
+      </div>
+    </td>
+  </tr>
+); // the join method is used to convert an array into a string
+const TeacherList = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
+  const { page, ...queryParams } = searchParams;
+  const p = page ? parseInt(page) : 1;
+  const [data, count] = await prisma.$transaction([
+    prisma.teacher.findMany({
+      include: {
+        subjects: true,
+        classes: true,
+      },
+      take: ITEM_PER_PAGE,
+      skip: (p - 1) * ITEM_PER_PAGE,
+    }),
+    prisma.teacher.count(),
+  ]);
   return (
     <div className="dark:bg-[#171616] p-4 rounded-md flex-1 m-4 mt-0">
       {/* top */}
@@ -62,22 +92,19 @@ const TeacherList = () => {
         <h1 className="hidden md:block text-lg font-semibold">All Teachers</h1>
         <div className="flex flex-col md:flex-row gap-4 items-center w-full md:w-auto">
           <TableSearch />
-            <div className="flex items-center gap-4 self-end">
-              <HiOutlineAdjustmentsHorizontal />
-              <BsSortDown />
-              {role === "admin" && 
-              <FormModal table="teacher" type="create" icon={<GoPlus />}/>}
-            </div>
+          <div className="flex items-center gap-4 self-end">
+            <HiOutlineAdjustmentsHorizontal />
+            <BsSortDown />
+            {role === "admin" && (
+              <FormModal table="teacher" type="create" icon={<GoPlus />} />
+            )}
+          </div>
         </div>
       </div>
       {/* list */}
-      <Table
-        columns={teacherTableColumns}
-        renderRow={renderRow}
-        data={teachersData}
-      />
+      <Table columns={teacherTableColumns} renderRow={renderRow} data={data} />
       {/* pagination */}
-      <Pagination />
+      <Pagination page={p} count={count} />
     </div>
   );
 };
