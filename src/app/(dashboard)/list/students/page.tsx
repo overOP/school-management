@@ -76,7 +76,7 @@ const StudentList = () => {
         data={studentsData}
       />
       {/* pagination */}
-      <Pagination />
+      <Pagination page={1} count={studentsData.length} />
     </div>
   );
 };

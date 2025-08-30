@@ -59,7 +59,6 @@ const renderRow = (item: teacherProps) => (
           <FormModal
             table="teacher"
             type="delete"
-            id={item.id}
             icon={<MdDelete />}
           />
         )}
